@@ -81,9 +81,25 @@ void borrar(struct nodo *reco)
 void leerArchivo(){
     FILE *ArchivoProcesos = fopen("procesos.in","r");
     char aux;
+    int numero;
     while(aux != EOF){
         aux = fgetc(ArchivoProcesos);
-        printf("%c",aux);
+        if(aux == 'P'){
+            aux = fgetc(ArchivoProcesos);
+        }
+        /*
+        if(aux == ' '){
+            printf("%c",aux);
+            //aux = fgetc(ArchivoProcesos);
+        }
+        */
+        char *num;
+        num = &aux;
+        numero = atoi(num);
+        printf("%i ",numero);
+        if(aux == '\n'){
+            printf("\n");
+        }
     }
 
 }
@@ -91,11 +107,14 @@ void leerArchivo(){
 int main()
 {
     leerArchivo();
+    printf("\n");
+    /*
     insertar(100);
     insertar(50);
     insertar(25);
     insertar(75);
     insertar(150);
+    */
     /*
     printf("Impresion preorden: ");
     imprimirPre(raiz);
