@@ -3,12 +3,39 @@
 
 struct nodo {
     int proceso;
+    int NumeroGenes;
+    int *Genes;
     struct nodo *izq;
     struct nodo *der;
 };
 
 struct nodo *raiz=NULL;
-
+struct nodo* busca(int key, struct nodo* ptr) {        // buscar key
+  if (key == ptr->proceso) return ptr;      // Ok. encuentro!
+  if (key < ptr->proceso) {           // debe estar en la rama izquierda
+    if (ptr->izq == NULL) return NULL;  // no existe
+    busca(key, ptr->izq);         // enlace ocupado: seguir buscando
+  }
+  if (key > ptr->proceso) {           // debe estar en la rama derecha
+    if (ptr->der == NULL) return NULL;  // no existe
+    busca(key, ptr->der);         // enlace ocupado: seguir buscando
+  }
+  return NULL;
+}
+void insertarGen(struct nodo *raiz,int numeroProceso,int Gen){
+    struct nodo *aux = busca(numeroProceso,raiz);
+    if(aux->NumeroGenes == 1){
+        aux->NumeroGenes++;
+    }else{
+        aux->NumeroGenes = 1;
+    }
+    
+    //buscar un nodo con el numero del proceso
+    /*
+    numerodegen++;
+    genes[numerodegen-1] = gen;
+    */
+}
 void insertar(int x)
 {
     struct nodo *nuevo;
@@ -91,7 +118,7 @@ void leerArchivoGenes(){
         	//printf("%c",aux);
         	numero = atoi(num);
         	printf("%i",numero);
-        	insertar(numero);
+        	//insertar(numero);
 		}
 	}
 }
@@ -110,7 +137,6 @@ void leerArchivoProcesos(){
         	//printf("%c",aux);
         	numero = atoi(num);
         	printf("%i",numero);
-        	insertar(numero);
         }
         /*
         if(numero != 0){
@@ -123,12 +149,39 @@ void leerArchivoProcesos(){
     }
 
 }
+void imprimir(struct nodo *reco){
+    if (reco != NULL)
+    {
+        printf("%i",reco->proceso);
+        if(reco->izq != NULL){
+            //printf("\\");
+            printf("\n");
+            printf("P%i",reco->proceso);
+            printf("<-");
+            imprimir(reco->izq);
+        }
+        if(reco->der != NULL){
+            printf("\n");
+            printf("\t\t\t");
+            printf("P%i",reco->proceso);
+            printf("->");
+            imprimir(reco->der);
+        }
+    }
+}
 int main()
 {
     leerArchivoProcesos();
     printf("\n\n\n\n\n\n");
     leerArchivoGenes();
     printf("\n");
+    insertar(50);
+    insertar(25);
+    insertar(30);
+    insertar(15);
+    insertar(10);
+    insertar(12);
+    imprimir(raiz);
     /*
     insertar(100);
     insertar(50);
