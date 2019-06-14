@@ -78,35 +78,56 @@ void borrar(struct nodo *reco)
         free(reco);
     }
 }
-void leerArchivo(){
+void leerArchivoGenes(){
+	FILE *ArchivoGenes = fopen("genes.in","r");
+	char aux;
+	int numero;
+	while(aux != EOF ){
+		aux = fgetc(ArchivoGenes);
+		if(aux == 'G'){
+			aux = fgetc(ArchivoGenes);
+			char *num;
+        	num = &aux;
+        	//printf("%c",aux);
+        	numero = atoi(num);
+        	printf("%i",numero);
+        	insertar(numero);
+		}
+	}
+}
+void leerArchivoProcesos(){
     FILE *ArchivoProcesos = fopen("procesos.in","r");
     char aux;
     int numero;
     while(aux != EOF){
         aux = fgetc(ArchivoProcesos);
-        if(aux == 'P'){
+        if(aux == 'P' /*|| aux == ' '*/){
             aux = fgetc(ArchivoProcesos);
         }
+        if(aux != ' ' && aux != '\n'){
+        	char *num;
+        	num = &aux;
+        	//printf("%c",aux);
+        	numero = atoi(num);
+        	printf("%i",numero);
+        	insertar(numero);
+        }
         /*
-        if(aux == ' '){
-            printf("%c",aux);
-            //aux = fgetc(ArchivoProcesos);
+        if(numero != 0){
+        	printf("%i",numero);
         }
         */
-        char *num;
-        num = &aux;
-        numero = atoi(num);
-        printf("%i ",numero);
         if(aux == '\n'){
             printf("\n");
         }
     }
 
 }
-
 int main()
 {
-    leerArchivo();
+    leerArchivoProcesos();
+    printf("\n\n\n\n\n\n");
+    leerArchivoGenes();
     printf("\n");
     /*
     insertar(100);
