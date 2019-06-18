@@ -122,10 +122,33 @@ void leerArchivoGenes(){
 		}
 	}
 }
+int cantidadVertices = 0;
 void leerArchivoProcesos(){
     FILE *ArchivoProcesos = fopen("procesos.in","r");
     char aux;
     int numero;
+    while(aux != '\n'){
+        aux = fgetc(ArchivoProcesos);
+        char *num;
+        num = &aux;
+        //printf("%c",aux);
+        numero = atoi(num);
+        printf("el numero es %i\n",numero);
+        if(numero > 0){
+            cantidadVertices = numero;
+        }
+    }
+    printf("la cantidadVertices %i\n",numero);
+    aux = fgetc(ArchivoProcesos);
+    while(aux != '\n'){
+        aux = fgetc(ArchivoProcesos);
+        char *num;
+        num = &aux;
+        //printf("%c",aux);
+        numero = atoi(num);
+        printf("el numero es %i\n",numero);
+        //printf("el caracter es = %c\n",aux);
+    }
     while(aux != EOF){
         aux = fgetc(ArchivoProcesos);
         if(aux == 'P' /*|| aux == ' '*/){
@@ -156,14 +179,14 @@ void imprimir(struct nodo *reco){
         if(reco->izq != NULL){
             //printf("\\");
             printf("\n");
-            printf("P%i",reco->proceso);
-            printf("<-");
+            //printf("P%i",reco->proceso);
+            //printf("<-");
             imprimir(reco->izq);
         }
         if(reco->der != NULL){
             printf("\n");
-            printf("\t\t\t");
-            printf("P%i",reco->proceso);
+            //printf("\t\t\t");
+            //printf("P%i",reco->proceso);
             printf("->");
             imprimir(reco->der);
         }
@@ -181,6 +204,7 @@ int main()
     insertar(15);
     insertar(10);
     insertar(12);
+    printf("\t\t");
     imprimir(raiz);
     /*
     insertar(100);
