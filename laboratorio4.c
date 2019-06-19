@@ -58,9 +58,11 @@ void insertarGen(Lista *lista,int proceso,int gen){
     aux->cantidadGenes++;
     aux->genes = (int *)malloc(sizeof(aux->cantidadGenes));
     aux->genes[aux->cantidadGenes-1] = gen;
+    /*
     printf("el numero del gen es :%i\n",aux->genes[aux->cantidadGenes-1]);
     printf("cantidadGenes %i\n",aux->cantidadGenes);
     printf("aux %i\n",aux->dato);
+    */
 }
 void agregarHijo(Nodo *aux1 , Nodo *aux2 , Hijo *nuevo){
     Hijo *a;
@@ -76,10 +78,9 @@ void agregarHijo(Nodo *aux1 , Nodo *aux2 , Hijo *nuevo){
         a->siguiente = nuevo; 
     }
 }
-void insertarHijo(Lista *lista,int ini,int fin,int peso){
+void insertarHijo(Lista *lista,int ini,int fin){
     Hijo *nuevo = (Hijo *)malloc(sizeof(Hijo));
     nuevo->siguiente = NULL;
-    //nuevo->peso = peso;
     Nodo *aux1,*aux2;
     aux1 = lista->inicio;
     aux2 = lista->inicio;
@@ -115,7 +116,7 @@ void visualizarGrafo(Lista *lista){
     }
     printf("\n");
 }
-void leerArchivoGenes(){
+void leerArchivoGenes(Lista *lista){
     FILE *ArchivoGenes = fopen("genes.in","r");
     char aux;
     int numero,numero1;
@@ -129,6 +130,23 @@ void leerArchivoGenes(){
             numero = atoi(num);
             printf("%i",numero);
             //insertar(numero);
+        }
+        if(aux == ' '){
+            printf(" ");
+            aux = fgetc(ArchivoGenes);
+        }
+        if(aux == 'P'){
+            aux = fgetc(ArchivoGenes);
+            char *num;
+            num = &aux;
+            //printf("%c",aux);
+            numero1 = atoi(num);
+            printf("%i",numero1);
+            insertarGen(lista,numero1,numero);
+        }
+        //printf("%c",aux);
+        if(aux == '\n'){
+            printf("\n");
         }
     }
 }
@@ -201,7 +219,7 @@ Lista *leerArchivoProcesos(){
             char *num;
             num = &aux;
             numero1 = atoi(num);
-            insertarHijo(lista,numero1,numero2,0);
+            insertarHijo(lista,numero1,numero2);
         }
         if(aux == '\n'){
             aux = fgetc(ArchivoProcesos);
@@ -213,12 +231,34 @@ Lista *leerArchivoProcesos(){
     }
     return lista;
 }
+void imprimirGenes(Lista *lista){
+    Nodo *aux=lista->inicio;
+    Hijo  *ar;
+    printf("\nNodos\n");
+    while(aux!=NULL){   
+        printf("%i:    ",aux->dato);
+        if(aux->cantidadGenes != 0){
+            printf("la cantidadGenes es %i",aux->cantidadGenes);
+            /*
+            int i = 0;
+            while(i < aux->cantidadGenes){
+                printf("G%i",aux->genes[i]);
+                i++;
+            }
+            */
+        }
+        printf("\n");
+        aux=aux->siguiente;
+    }
+    printf("\n");
+}
 int main()
 {
 
     Lista *lista = leerArchivoProcesos();
     visualizarGrafo(lista);
-    leerArchivoGenes();
+    leerArchivoGenes(lista);
+    imprimirGenes(lista);
     printf("\n");
     //insertarGen(lista,3,1);
     printf("\n\n\n\n\n\n");
