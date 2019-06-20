@@ -106,7 +106,7 @@ void visualizarGrafo(Lista *lista){
                 ar=ar->siguiente;
             }
         }
-        
+        printf("la cantidadGenes es :%i  ",aux->cantidadGenes);
         if(aux->cantidadGenes != 0){
             int i = 0;
             printf("\t");
