@@ -260,7 +260,6 @@ void imprimirGenes(Lista *lista){
 }
 int main()
 {
-
     Lista *lista = leerArchivoProcesos();
     leerArchivoGenes(lista);
     visualizarGrafo(lista);
