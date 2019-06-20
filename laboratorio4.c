@@ -56,13 +56,8 @@ void insertarGen(Lista *lista,int proceso,int gen){
         aux = aux->siguiente;
     }
     aux->cantidadGenes++;
-    aux->genes = (int *)malloc(sizeof(aux->cantidadGenes));
+    aux->genes = (int *)realloc(aux->genes,sizeof(int )*(aux->cantidadGenes));
     aux->genes[aux->cantidadGenes-1] = gen;
-    /*
-    printf("el numero del gen es :%i\n",aux->genes[aux->cantidadGenes-1]);
-    printf("cantidadGenes %i\n",aux->cantidadGenes);
-    printf("aux %i\n",aux->dato);
-    */
 }
 void agregarHijo(Nodo *aux1 , Nodo *aux2 , Hijo *nuevo){
     Hijo *a;
@@ -111,6 +106,17 @@ void visualizarGrafo(Lista *lista){
                 ar=ar->siguiente;
             }
         }
+        
+        if(aux->cantidadGenes != 0){
+            int i = 0;
+            printf("\t");
+            printf("tiene como genes a");
+            while(i < aux->cantidadGenes){
+                printf(" G%i",aux->genes[i]);
+                i++;
+            }
+        }
+        
         printf("\n");
         aux=aux->siguiente;
     }
@@ -128,7 +134,7 @@ void leerArchivoGenes(Lista *lista){
             num = &aux;
             //printf("%c",aux);
             numero = atoi(num);
-            printf("%i",numero);
+            //printf("G%i",numero);
             //insertar(numero);
         }
         if(aux == ' '){
@@ -239,13 +245,12 @@ void imprimirGenes(Lista *lista){
         printf("%i:    ",aux->dato);
         if(aux->cantidadGenes != 0){
             printf("la cantidadGenes es %i",aux->cantidadGenes);
-            /*
             int i = 0;
             while(i < aux->cantidadGenes){
                 printf("G%i",aux->genes[i]);
                 i++;
             }
-            */
+            
         }
         printf("\n");
         aux=aux->siguiente;
@@ -256,9 +261,9 @@ int main()
 {
 
     Lista *lista = leerArchivoProcesos();
-    visualizarGrafo(lista);
     leerArchivoGenes(lista);
-    imprimirGenes(lista);
+    visualizarGrafo(lista);
+    //imprimirGenes(lista);
     printf("\n");
     //insertarGen(lista,3,1);
     printf("\n\n\n\n\n\n");
