@@ -117,6 +117,7 @@ void visualizarGrafo(Lista *lista){
             }
         }
         //holaaaaa jasdjasjdajsdasjd
+        //jaja arregla esta wea
         printf("\n");
         aux=aux->siguiente;
     }
