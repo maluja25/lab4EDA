@@ -266,6 +266,7 @@ int main()
     visualizarGrafo(lista);
     //imprimirGenes(lista);
     printf("\n");
+    printf("hola qlos");
     //insertarGen(lista,3,1);
     printf("\n\n\n\n\n\n");
     //leerArchivoGenes();

@@ -266,6 +266,7 @@ int main()
     //imprimirGenes(lista);
     printf("\n");
     //insertarGen(lista,3,1);
+    printf("hola qlos jaaj\n");
     printf("\n\n\n\n\n\n");
     //leerArchivoGenes();
     return 0;
