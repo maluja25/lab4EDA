@@ -24,6 +24,7 @@ Lista{
   Nodo *inicio;
   Nodo *fin; //por comodidad por si piden el el ultimo dato
 };
+Lista *lista;
 void inicializar(Lista *lista){
   // a la lista que ingresa le apuntaremos a inicio y fin un NULL y al tamano = 0;
   lista->inicio = NULL;
@@ -92,7 +93,7 @@ void insertarHijo(Lista *lista,int ini,int fin){
         aux1 = aux1->siguiente;
     }
 }
-void visualizarGrafo(Lista *lista){
+void visualizarGrafo(){
     Nodo *aux=lista->inicio;
     Hijo  *ar;
     printf("\nNodos\n");
@@ -123,7 +124,7 @@ void visualizarGrafo(Lista *lista){
     }
     printf("\n");
 }
-void leerArchivoGenes(Lista *lista){
+void leerArchivoGenes(){
     FILE *ArchivoGenes = fopen("genes.in","r");
     char aux;
     int numero,numero1;
@@ -261,9 +262,9 @@ void imprimirGenes(Lista *lista){
 int main()
 {
 
-    Lista *lista = leerArchivoProcesos();
-    leerArchivoGenes(lista);
-    visualizarGrafo(lista);
+    lista = leerArchivoProcesos();
+    leerArchivoGenes();
+    visualizarGrafo();
     //imprimirGenes(lista);
     printf("\n");
     printf("hola qlos");
