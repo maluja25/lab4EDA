@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #define Nodo struct Nodo
-#define Hijo struct Hijo
+#define Padre struct Padre
 #define Lista struct Lista
 
 Nodo
@@ -10,12 +10,13 @@ Nodo
     int cantidadGenes;
     int *genes;
     Nodo *siguiente;
-    Hijo *adyacencia;    
+    Nodo *anterior;
+    Padre *adyacencia;    
 };
-Hijo
+Padre
 {
-    Nodo *hijo;
-    Hijo *siguiente;
+	Nodo *padre;
+	Padre *siguiente;
 };
 Lista{
     //declaramos el tamano del arreglo 
@@ -24,30 +25,12 @@ Lista{
   Nodo *inicio;
   Nodo *fin; //por comodidad por si piden el el ultimo dato
 };
+Lista *lista;
 void inicializar(Lista *lista){
   // a la lista que ingresa le apuntaremos a inicio y fin un NULL y al tamano = 0;
   lista->inicio = NULL;
   lista->fin = NULL;
   lista->tamano= 0;
-}
-void insertarNodo(Lista *lista,int N){
-    Nodo *aux;
-    Nodo *nuevo = (Nodo *)malloc(sizeof(Nodo));
-    nuevo->dato = N;
-    nuevo->cantidadGenes = 0;
-    nuevo->genes = (int *)malloc(sizeof(nuevo->cantidadGenes));
-    nuevo->siguiente = NULL;
-    nuevo->adyacencia = NULL;
-    if(lista->tamano == 0){
-    lista->inicio = nuevo;
-    lista->fin = nuevo;
-    lista->tamano++;
-    }
-    else{
-    lista->tamano++;
-    lista->fin->siguiente = nuevo;
-    lista->fin = nuevo;
-  }
 }
 void insertarGen(Lista *lista,int proceso,int gen){
     Nodo *aux;
@@ -59,22 +42,45 @@ void insertarGen(Lista *lista,int proceso,int gen){
     aux->genes = (int *)realloc(aux->genes,sizeof(int )*(aux->cantidadGenes));
     aux->genes[aux->cantidadGenes-1] = gen;
 }
-void agregarHijo(Nodo *aux1 , Nodo *aux2 , Hijo *nuevo){
-    Hijo *a;
+void insertarNodo(Lista *lista,int N){
+    Nodo *aux;
+    Nodo *nuevo = (Nodo *)malloc(sizeof(Nodo));
+    nuevo->dato = N;
+    nuevo->cantidadGenes = 0;
+    nuevo->genes = (int *)malloc(sizeof(nuevo->cantidadGenes));
+    nuevo->siguiente = NULL;
+    nuevo->adyacencia = NULL;
+    if(lista->tamano == 0){
+    nuevo->anterior = NULL;
+    lista->inicio = nuevo;
+    lista->fin = nuevo;
+    lista->tamano++;
+    }
+    else{
+    lista->tamano++;
+    nuevo->anterior = lista->fin;
+    lista->fin->siguiente = nuevo;
+    lista->fin = nuevo;
+  }
+}
+void agregarPadre(Nodo *aux1 , Nodo *aux2 , Padre *nuevo){
+    Padre *a;
     if(aux1->adyacencia == NULL){
         aux1->adyacencia = nuevo;
-        nuevo->hijo = aux2;
+        nuevo->padre = aux2;
     }else{
         a = aux1->adyacencia;
         while(a->siguiente != NULL){
             a = a->siguiente;
         }
-        nuevo->hijo = aux2;
+        nuevo->padre = aux2;
         a->siguiente = nuevo; 
     }
 }
-void insertarHijo(Lista *lista,int ini,int fin){
-    Hijo *nuevo = (Hijo *)malloc(sizeof(Hijo));
+int cantidadVertices = 0;
+int nodoRaiz = 0;
+void insertarPadre(Lista *lista,int ini,int fin){
+    Padre *nuevo = (Padre *)malloc(sizeof(Padre));
     nuevo->siguiente = NULL;
     Nodo *aux1,*aux2;
     aux1 = lista->inicio;
@@ -87,30 +93,39 @@ void insertarHijo(Lista *lista,int ini,int fin){
     }
     while(aux1 != NULL){
         if(aux1->dato ==ini){
-            agregarHijo(aux1,aux2,nuevo);
+            agregarPadre(aux1,aux2,nuevo);
         }
         aux1 = aux1->siguiente;
     }
 }
-void visualizarGrafo(Lista *lista){
+void ImprimirAR(){
+	Nodo *aux=lista->fin;
+	while(aux != NULL){
+		printf("%i\n",aux->dato);
+		aux = aux->anterior;
+	}
+
+}
+void visualizarGrafo(){
     Nodo *aux=lista->inicio;
-    Hijo  *ar;
+    Padre  *ar;
     printf("\nNodos\n");
     while(aux!=NULL){   
         printf("%i:    ",aux->dato);
         if(aux->adyacencia!=NULL){
             ar=aux->adyacencia;
             while(ar!=NULL){ 
-                printf(" %i",ar->hijo->dato);
+                printf(" %i",ar->padre->dato);
                 //printf("(%i)",ar->peso);
                 ar=ar->siguiente;
             }
         }
         
+        //printf("la cantidadGenes es :%i  ",aux->cantidadGenes);
         if(aux->cantidadGenes != 0){
             int i = 0;
             printf("\t");
-            printf("tiene como genes a");
+            //printf("tiene como genes a");
             while(i < aux->cantidadGenes){
                 printf(" G%i",aux->genes[i]);
                 i++;
@@ -118,12 +133,13 @@ void visualizarGrafo(Lista *lista){
         }
         //holaaaaa jasdjasjdajsdasjd
         //jaja arregla esta wea
+        
         printf("\n");
         aux=aux->siguiente;
     }
     printf("\n");
 }
-void leerArchivoGenes(Lista *lista){
+void leerArchivoGenes(){
     FILE *ArchivoGenes = fopen("genes.in","r");
     char aux;
     int numero,numero1;
@@ -148,7 +164,7 @@ void leerArchivoGenes(Lista *lista){
             num = &aux;
             //printf("%c",aux);
             numero1 = atoi(num);
-            printf("%i",numero1);
+            //printf("%i",numero1);
             insertarGen(lista,numero1,numero);
         }
         //printf("%c",aux);
@@ -157,9 +173,6 @@ void leerArchivoGenes(Lista *lista){
         }
     }
 }
-int cantidadVertices = 0;
-int nodoRaiz = 0;
-
 Lista *leerArchivoProcesos(){
     Lista *lista = (Lista *)malloc(sizeof(Lista));
     inicializar(lista);
@@ -214,7 +227,31 @@ Lista *leerArchivoProcesos(){
     fclose(ArchivoProcesos);
     ArchivoProcesos = fopen("procesos.in","r");
     aux = fgetc(ArchivoProcesos);
+    printf("e%c",aux);
+    while(aux != EOF){
+    	aux = fgetc(ArchivoProcesos);
+    	if(aux == '\n'){
+    		printf("\n");
+    		aux = fgetc(ArchivoProcesos);
+    		aux = fgetc(ArchivoProcesos);
+    		char *num;
+            num = &aux;
+            numero1 = atoi(num);
+    		printf("%i",numero1);
+    		
+    	}
+    	if(aux == 'P'){
+    		aux = fgetc(ArchivoProcesos);
+    		char *num;
+            num = &aux;
+            numero2 = atoi(num);
+    		printf(":%i",numero2);
+    		insertarPadre(lista,numero1,numero2);
+    	}
+    	   	
+    }
     //aux = fgetc(ArchivoProcesos); por si las moscas , lo descomentamos.
+    /*
     while(aux != EOF){
         aux = fgetc(ArchivoProcesos);
         if(aux == 'P'){
@@ -226,7 +263,7 @@ Lista *leerArchivoProcesos(){
             char *num;
             num = &aux;
             numero1 = atoi(num);
-            insertarHijo(lista,numero1,numero2);
+            insertarPadre(lista,numero1,numero2);
         }
         if(aux == '\n'){
             aux = fgetc(ArchivoProcesos);
@@ -236,11 +273,12 @@ Lista *leerArchivoProcesos(){
             numero2 = atoi(num);
         }
     }
+    */
     return lista;
 }
 void imprimirGenes(Lista *lista){
     Nodo *aux=lista->inicio;
-    Hijo  *ar;
+    Padre  *ar;
     printf("\nNodos\n");
     while(aux!=NULL){   
         printf("%i:    ",aux->dato);
@@ -258,16 +296,58 @@ void imprimirGenes(Lista *lista){
     }
     printf("\n");
 }
+int ObtenerNivel(int proceso){
+    Nodo *aux;
+    //Padre *ar;
+    aux = lista->inicio;
+    while(aux->dato != proceso){
+        aux = aux->siguiente;
+    }
+    Nodo *aux1;
+    aux1 = lista->inicio;
+    Padre  *ar;
+    int contador = 0;
+    while(aux->dato != aux1->dato || ar->padre->dato != aux1->dato){
+        if(aux->adyacencia!=NULL){
+            ar=aux->adyacencia;
+            aux = ar->padre;
+        }
+        contador++;
+    }
+    //printf("el contador %i\n",contador);
+    return contador;
+}
+int SimilitudWP(int proceso1,int proceso2){
+    int NodoComun;
+    Nodo *aux1,*aux2;
+    aux1 = lista->inicio;
+    while(aux1->dato != proceso1 ){
+        aux1 = aux1->siguiente;
+    }
+    //printf("el nodo es %i\n",aux1->dato);
+    aux2 = lista->inicio;
+    while(aux2->dato != proceso2 ){
+        aux2 = aux2->siguiente;
+    }
+    int Nivel1,Nivel2;
+    Nivel1 = ObtenerNivel(proceso1);
+    Nivel2 = ObtenerNivel(proceso2);
+    printf("Nivel 1 %i\n",Nivel1);
+    printf("Nivel 2 %i\n",Nivel2);
+    return 0;
+}
 int main()
 {
-    Lista *lista = leerArchivoProcesos();
-    leerArchivoGenes(lista);
-    visualizarGrafo(lista);
+    lista = leerArchivoProcesos();
+    leerArchivoGenes();
+    visualizarGrafo();
+    SimilitudWP(4,6);
+    //ObtenerNivel(9);
+    //ImprimirAR();
     //imprimirGenes(lista);
-    printf("\n");
+    //printf("hola qlos");
     //insertarGen(lista,3,1);
-    printf("hola qlos jaaj\n");
-    printf("\n\n\n\n\n\n");
+    
     //leerArchivoGenes();
     return 0;
 }
