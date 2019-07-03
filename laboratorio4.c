@@ -107,18 +107,16 @@ void visualizarGrafo(){
                 ar=ar->siguiente;
             }
         }
-        printf("la cantidadGenes es :%i  ",aux->cantidadGenes);
+        //printf("la cantidadGenes es :%i  ",aux->cantidadGenes);
         if(aux->cantidadGenes != 0){
             int i = 0;
             printf("\t");
-            printf("tiene como genes a");
+            //printf("tiene como genes a");
             while(i < aux->cantidadGenes){
                 printf(" G%i",aux->genes[i]);
                 i++;
             }
         }
-        //holaaaaa jasdjasjdajsdasjd
-        //jaja arregla esta wea
         printf("\n");
         aux=aux->siguiente;
     }
@@ -167,29 +165,6 @@ Lista *leerArchivoProcesos(){
     FILE *ArchivoProcesos = fopen("procesos.in","r");
     char aux;
     int numero;
-    while(aux != ' ' && aux != '\n'){
-        aux = fgetc(ArchivoProcesos);
-        char *num;
-        num = &aux;
-        numero = atoi(num);
-        if(numero > 0){
-            cantidadVertices = numero;
-        }
-    }
-    printf("la cantidadVertices = %i\n",cantidadVertices);
-    aux = fgetc(ArchivoProcesos);
-    while(aux != '\n'){
-        aux = fgetc(ArchivoProcesos);
-        char *num;
-        num = &aux;
-        numero = atoi(num);
-        if(numero > 0 ){
-            nodoRaiz = numero;
-        }
-    }
-    fclose(ArchivoProcesos);
-    ArchivoProcesos = fopen("procesos.in","r");
-    printf("el nodoRaiz es :%i\n",nodoRaiz);
     ArchivoProcesos = fopen("procesos.in","r");
     aux = fgetc(ArchivoProcesos);
     int numero1,numero2;
@@ -227,6 +202,7 @@ Lista *leerArchivoProcesos(){
             char *num;
             num = &aux;
             numero1 = atoi(num);
+            printf("el numero1 es %i",numero1);
             insertarHijo(lista,numero1,numero2);
         }
         if(aux == '\n'){
@@ -235,6 +211,7 @@ Lista *leerArchivoProcesos(){
             char *num;
             num = &aux;
             numero2 = atoi(num);
+            printf("el numero2 es %i\n",numero2);
         }
     }
     return lista;
@@ -259,15 +236,29 @@ void imprimirGenes(Lista *lista){
     }
     printf("\n");
 }
+void SimilitudWuPalmer(int proceso1,int proceso2){
+    Nodo *aux1=lista->inicio;
+    Nodo *aux2=lista->inicio;
+    Hijo  *ar;
+    printf("\nNodos\n");
+    while(aux1->dato != proceso1 ){      
+        aux1=aux1->siguiente;
+    }
+    printf("%i",aux1->dato);
+    printf("\n");
+    while(aux2->dato != proceso2 ){   
+        aux2=aux2->siguiente;
+    }
+    /**/
+}
 int main()
 {
-
     lista = leerArchivoProcesos();
     leerArchivoGenes();
     visualizarGrafo();
+    SimilitudWuPalmer(9,6);
     //imprimirGenes(lista);
     printf("\n");
-    printf("hola qlos");
     //insertarGen(lista,3,1);
     printf("\n\n\n\n\n\n");
     //leerArchivoGenes();
