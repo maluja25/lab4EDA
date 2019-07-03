@@ -79,7 +79,6 @@ void agregarPadre(Nodo *aux1 , Nodo *aux2 , Padre *nuevo){
 }
 int cantidadVertices = 0;
 int nodoRaiz = 0;
-
 void insertarPadre(Lista *lista,int ini,int fin){
     Padre *nuevo = (Padre *)malloc(sizeof(Padre));
     nuevo->siguiente = NULL;
@@ -126,7 +125,7 @@ void visualizarGrafo(){
         if(aux->cantidadGenes != 0){
             int i = 0;
             printf("\t");
-            printf("tiene como genes a");
+            //printf("tiene como genes a");
             while(i < aux->cantidadGenes){
                 printf(" G%i",aux->genes[i]);
                 i++;
@@ -297,21 +296,54 @@ void imprimirGenes(Lista *lista){
     }
     printf("\n");
 }
+int ObtenerNivel(int proceso){
+    Nodo *aux;
+    //Padre *ar;
+    aux = lista->inicio;
+    while(aux->dato != proceso){
+        aux = aux->siguiente;
+    }
+    Nodo *aux1;
+    aux1 = lista->inicio;
+    Padre  *ar;
+    int contador = 0;
+    while(aux->dato != aux1->dato || ar->padre->dato != aux1->dato){
+        if(aux->adyacencia!=NULL){
+            ar=aux->adyacencia;
+            aux = ar->padre;
+        }
+        contador++;
+    }
+    //printf("el contador %i\n",contador);
+    return contador;
+}
 int SimilitudWP(int proceso1,int proceso2){
-
-
-
-
-
-
+    int NodoComun;
+    Nodo *aux1,*aux2;
+    aux1 = lista->inicio;
+    while(aux1->dato != proceso1 ){
+        aux1 = aux1->siguiente;
+    }
+    //printf("el nodo es %i\n",aux1->dato);
+    aux2 = lista->inicio;
+    while(aux2->dato != proceso2 ){
+        aux2 = aux2->siguiente;
+    }
+    int Nivel1,Nivel2;
+    Nivel1 = ObtenerNivel(proceso1);
+    Nivel2 = ObtenerNivel(proceso2);
+    printf("Nivel 1 %i\n",Nivel1);
+    printf("Nivel 2 %i\n",Nivel2);
+    return 0;
 }
 int main()
 {
-
     lista = leerArchivoProcesos();
     leerArchivoGenes();
     visualizarGrafo();
-    ImprimirAR();
+    SimilitudWP(4,6);
+    //ObtenerNivel(9);
+    //ImprimirAR();
     //imprimirGenes(lista);
     //printf("hola qlos");
     //insertarGen(lista,3,1);
